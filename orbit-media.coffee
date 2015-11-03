@@ -83,8 +83,8 @@ Orbit.Media = new FS.Collection "OrbitMedia",
   filter:
     maxSize: 1024 * 1024 * 500 # 500 mb
     allow:
-      extensions: ['pdf', 'png', 'jpg', 'gif', 'jpeg', 'mp3', 'wav', 'mp4']
-      contentTypes: ['image/*', 'audio/*', 'video/*', 'application/pdf']
+      extensions: ['pdf', 'png', 'jpg', 'gif', 'jpeg', 'mp3', 'wav', 'mp4', 'ttf', 'otf']
+      contentTypes: ['image/*', 'audio/*', 'video/*', 'application/pdf', 'application/x-font-ttf', 'application/x-font-opentype']
 
     onInvalid: (message) ->
       if Meteor.isClient
