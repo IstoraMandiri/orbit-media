@@ -3,9 +3,7 @@
     <span class="btn btn-primary btn-lg btn-file orbit-media-upload">
         Upload file <input type="file" multiple='true'>
     </span>
-
     <br><br>
-
     {{#each allFiles}}
     <div class="row">
       <div class="col-sm-12">
@@ -17,12 +15,15 @@
             <div class="col-sm-9">
               <h4>{{original.name}} <small class='text-muted'>{{original.type}}</small></h4>
               <p>
-                Uploaded {{formatDateTime uploadedAt}}
-                <br/> {{#if isImage}}
-                <a href="{{url auth=false}}" target="_blank">Default</a> {{formatFilesize copies.default.size}} |
-                <a href="{{url store='large' auth=false}}" target="_blank">Large</a> {{formatFilesize copies.large.size}} |
-                <a href="{{url store='thumb' auth=false}}" target="_blank">Thumb</a> {{formatFilesize copies.thumb.size}} {{/if}} {{#if $eq original.type 'application/pdf'}} {{formatFilesize copies.default.size}} {{/if}}
-                <br> {{#unless isImage}} {{url}} {{/unless}}
+                Uploaded {{OrbitFormatDateTime uploadedAt}}
+                <br/>
+                {{#if isImage}}
+                  <a href="{{url auth=false}}" target="_blank">Default</a> {{OrbitFormatFilesize copies.default.size}} |
+                  <a href="{{url store='large' auth=false}}" target="_blank">Large</a> {{OrbitFormatFilesize copies.large.size}} |
+                  <a href="{{url store='thumb' auth=false}}" target="_blank">Thumb</a> {{OrbitFormatFilesize copies.thumb.size}}
+                {{/if}}
+                {{#if $eq original.type 'application/pdf'}} {{OrbitFormatFilesize copies.default.size}} {{/if}}
+                {{#unless isImage}} <a href="{{url auth=false}}" target="_blank">{{url auth=false}}</a> {{/unless}}
               </p>
             </div>
             <div class="col-sm-1 text-right">
@@ -34,10 +35,4 @@
     </div>
     {{/each}}
   </div>
-</template>
-
-<template name="OrbitMediaUploadButton">
-  <span class="btn btn-default btn-file orbit-media-upload">
-      Browse <input type="file" multiple='true'>
-  </span>
 </template>

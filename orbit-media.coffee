@@ -5,11 +5,11 @@ unless Orbit?
 
   if Meteor.isClient
     # general template helpers
-    UI.registerHelper 'formatDateTime', (dateObj) ->
+    UI.registerHelper 'OrbitFormatDateTime', (dateObj) ->
       thisDate = new Date(dateObj)
       return "#{thisDate.toLocaleDateString()} - #{thisDate.toLocaleTimeString()}"
 
-    UI.registerHelper 'formatFilesize', (bytes, si) ->
+    UI.registerHelper 'OrbitFormatFilesize', (bytes, si) ->
 
       thresh = if si then 1000 else 1024
 
@@ -46,12 +46,7 @@ Orbit.RegisterBlock
   # dafault (350)
   # thumb (80)
 
-# pdf + docman, convert to jpg
-  # large (2048) / max 400kb
-  # dafault (1024) / max 100kb
-  # thumb (120) / max 30kb
-
-# mp3, wav, mp4 (no converting)
+# ttf, otf, mp3, wav, mp4 (no converting)
 
 storeSettings = (storeName, imageOnly, transformFn) ->
 
@@ -84,7 +79,6 @@ Orbit.Media = new FS.Collection "OrbitMedia",
     maxSize: 1024 * 1024 * 500 # 500 mb
     allow:
       extensions: ['pdf', 'png', 'jpg', 'gif', 'jpeg', 'mp3', 'wav', 'mp4', 'ttf', 'otf']
-      contentTypes: ['image/*', 'audio/*', 'video/*', 'application/pdf', 'application/x-font-ttf', 'application/x-font-opentype']
 
     onInvalid: (message) ->
       if Meteor.isClient
@@ -97,12 +91,6 @@ if Meteor.isServer
 
   Meteor.publish null, -> Orbit.Media.find()
 
-  # TODO remove
-  Meteor.methods
-    clearMedia: ->
-      console.log 'removing all media'
-      Orbit.Media.remove({},{multi:true})
-
 if Meteor.isClient
 
   Template.OrbitMedia.helpers
@@ -112,17 +100,4 @@ if Meteor.isClient
     'change .orbit-media-upload': (e) ->
       FS.Utility.eachFile e, (file) -> Orbit.Media.insert file
 
-    'click .orbit-media-delete' : ->
-      Orbit.Media.remove @_id
-
-  # for external use
-  Template.OrbitMediaUploadButton.events
-    'change .orbit-media-upload' : (e) ->
-      console.log 'settings', @
-      if @settings?.multiple
-        @settings.fileHandler(e)
-      else
-        console.log 'single item'
-        file = e.target.files[0]
-        newFile = Orbit.Media.insert file
-        @settings.fileHandler(null, newFile) if @settings?.fileHandler
+    'click .orbit-media-delete' : -> Orbit.Media.remove @_id
